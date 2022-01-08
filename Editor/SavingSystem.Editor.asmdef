@@ -1,0 +1,16 @@
+{
+    "name": "Depra.SavingSystem.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9c9184fb89f68504bad07e8935804a93"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

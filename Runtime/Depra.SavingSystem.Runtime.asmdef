@@ -1,8 +1,11 @@
 {
-    "name": "Depra.SavingSystem",
+    "name": "SavingSystem.Runtime",
     "rootNamespace": "",
     "references": [
+        "GUID:764e421ee60e8124f9a950731dfe7c56",
+        "GUID:7ce2bd8ae595cf2459e458b3a542d784",
         "GUID:0bd375ccd9a5c7448ad77b2b9979b92a",
+        "GUID:daa3f5012d93ad544af85828b5c6a7af",
         "GUID:b7fea2f83e96e4e45850e556fc1ff264",
         "GUID:49b49c76ee64f6b41bf28ef951cb0e50",
         "GUID:146732467cca67f4a9bf8d4c48e2790a",

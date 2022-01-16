@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Depra.SavingSystem.Types;
+using Depra.SavingSystem.Runtime.Backends;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +9,7 @@ namespace Depra.SavingSystem.Runtime.Mono
     public class SaveNode : MonoBehaviour
     {
         [SerializeField] private string _key = "SaveData";
-        [SerializeReference, SubclassSelector] private FileSaving _backend = new FileSaving();
+        [SerializeReference, SubclassSelector] private FileSaveBackend _backend = new FileSaveBackend();
 
         //private FileSavingCommonParameters Parameters => SaveConfig.Instance.FileSaving;
 

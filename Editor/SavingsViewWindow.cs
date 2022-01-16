@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Depra.SavingSystem.Runtime;
+using Depra.SavingSystem.Runtime.Services;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Depra.SavingSystem.Editor
             public Data(string key)
             {
                 Key = key;
-                _rawData = SaveSystem.LoadRaw(key).ToString();
+                _rawData = SaveService.Instance.LoadRaw(key).ToString();
             }
 
             private string _rawData;
@@ -24,7 +25,7 @@ namespace Depra.SavingSystem.Editor
                 get => _rawData;
                 set
                 {
-                    SaveSystem.SaveRaw(Key, value);
+                    SaveService.Instance.SaveRaw(Key, value);
                     _rawData = value;
                 }
             }
@@ -33,7 +34,7 @@ namespace Depra.SavingSystem.Editor
         [MenuItem("Tools/Saves/Clear", priority = 1)]
         public static void ClearSaves()
         {
-            SaveSystem.DeleteAll();
+            SaveManager.DeleteAll();
         }
 
         [MenuItem("Tools/Saves/Inspector", priority = 2)]
@@ -86,10 +87,10 @@ namespace Depra.SavingSystem.Editor
 
         private void RefreshAllData()
         {
-            var keys = SaveSystem.GetAllKeys().ToArray();
+            var keys = SaveManager.GetAllKeys().ToArray();
             _allData = new Data[keys.Length];
 
-            for (int i = 0; i < keys.Length; i++)
+            for (var i = 0; i < keys.Length; i++)
             {
                 _allData[i] = new Data(keys[i]);
             }

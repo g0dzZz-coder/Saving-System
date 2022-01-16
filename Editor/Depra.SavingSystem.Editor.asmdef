@@ -1,8 +1,10 @@
 {
-    "name": "Depra.SavingSystem.Editor",
+    "name": "SavingSystem.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:9c9184fb89f68504bad07e8935804a93"
+        "GUID:9c9184fb89f68504bad07e8935804a93",
+        "GUID:764e421ee60e8124f9a950731dfe7c56",
+        "GUID:7ce2bd8ae595cf2459e458b3a542d784"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

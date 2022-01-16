@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Depra.SavingSystem.Runtime.Interfaces;
 using UnityEngine;
 
-namespace Depra.SavingSystem.Types
+namespace Depra.SavingSystem.Runtime.Backends
 {
     [Serializable]
     [AddTypeMenu("Player Prefs")]
-    public class PlayerPrefsSavingType : ISavingType
+    public class PlayerPrefsSaveBackend : ISaveBackend
     {
         private const string NumbersCounterKey = "ss.keysCount";
         private static string INDEX_HOLDER_KEY(int index) => $"ss.{index}";
@@ -26,11 +27,7 @@ namespace Depra.SavingSystem.Types
         {
             get
             {
-                if (_counts == null)
-                {
-                    _counts = PlayerPrefs.GetInt(NumbersCounterKey, 0);
-                }
-
+                _counts ??= PlayerPrefs.GetInt(NumbersCounterKey, 0);
                 return _counts.Value;
             }
             set
@@ -45,14 +42,20 @@ namespace Depra.SavingSystem.Types
             switch (value)
             {
                 case int intValue:
+                {
                     PlayerPrefs.SetInt(key, intValue);
                     break;
+                }
                 case float floatValue:
+                {
                     PlayerPrefs.SetFloat(key, floatValue);
                     break;
+                }
                 case string stringValue:
+                {
                     PlayerPrefs.SetString(key, stringValue);
                     break;
+                }
                 default:
                 {
                     var json = JsonUtility.ToJson(value);
@@ -94,7 +97,7 @@ namespace Depra.SavingSystem.Types
             {
                 return defaultValue;
             }
-
+            
             return JsonUtility.FromJson<T>(json);
         }
 
@@ -112,6 +115,7 @@ namespace Depra.SavingSystem.Types
         public void DeleteAll()
         {
             PlayerPrefs.DeleteAll();
+            _counts = 0;
         }
 
         public object LoadRaw(string key)
@@ -174,8 +178,10 @@ namespace Depra.SavingSystem.Types
             for (var i = 0; i < Counts; i++)
             {
                 var key = PlayerPrefs.GetString(INDEX_HOLDER_KEY(i));
-                if (PlayerPrefs.GetInt(KEY_HOLDER_INDEX(key)) < 0)
+                if (PlayerPrefs.GetInt(KEY_HOLDER_INDEX(key)) < 0 || string.IsNullOrEmpty(key))
+                {
                     continue;
+                }
 
                 yield return key;
             }

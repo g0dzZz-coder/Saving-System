@@ -2,7 +2,9 @@
     "name": "Depra.Saving.Tests",
     "rootNamespace": "",
     "references": [
-        "Depra.SavingSystem",
+        "SavingSystem.Runtime",
+        "Services.Runtime",
+        "Singletons.Runtime",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

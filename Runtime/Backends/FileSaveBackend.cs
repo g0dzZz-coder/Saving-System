@@ -4,19 +4,28 @@ using System.IO;
 using System.Text;
 using Depra.SavingSystem.Runtime.Configuration;
 using Depra.SavingSystem.Runtime.Data;
+using Depra.SavingSystem.Runtime.Interfaces;
 using Depra.Toolkit.Serialization.Serializers;
 using UnityEngine;
+using Encoding = System.Text.Encoding;
 
-namespace Depra.SavingSystem.Types
+namespace Depra.SavingSystem.Runtime.Backends
 {
+    public class FileSavingConfiguration
+    {
+        public string FolderName = "Saves";
+        public string FileFormat = "sav";
+        public SaveGamePath SaveGameFolder = SaveGamePath.DataPath;
+    }
+    
     [Serializable]
     [AddTypeMenu("File")]
-    public class FileSaving : ISavingType
+    public class FileSaveBackend : ISaveBackend
     {
         [SerializeField] private string _folderName = "Saves";
         [SerializeField] private string _fileFormat = "sav";
         [SerializeField] private SaveGamePath _saveGameFolder = SaveGamePath.DataPath;
-        
+
         private ISerializer Serializer => SaveConfig.Instance.Serializer;
 
         public void Save<T>(string path, T value)
@@ -31,7 +40,7 @@ namespace Depra.SavingSystem.Types
                 return defaultValue;
             }
 
-            using (FileStream stream = File.Open(path, FileMode.Open))
+            using (var stream = File.Open(path, FileMode.Open))
             {
                 var result = Serializer.Deserialize<T>(stream, Encoding.Default);
                 return result;
@@ -83,7 +92,7 @@ namespace Depra.SavingSystem.Types
         {
             return Directory.GetFiles(GetDirectoryPath());
         }
-        
+
         public string GetDirectoryPath()
         {
             var gameFolder = _saveGameFolder == SaveGamePath.DataPath

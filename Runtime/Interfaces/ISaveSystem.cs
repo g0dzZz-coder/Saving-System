@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace Depra.SavingSystem.Types
+namespace Depra.SavingSystem.Runtime.Interfaces
 {
-    public interface ISavingType
+    public interface ISaveSystem
     {
-        void Save<T>(string key, T value);
+        void Save<T>(string key, T data);
+        
         T Load<T>(string key, T defaultValue = default);
-
+        
         bool HasKey(string key);
         void DeleteKey(string key);
         void DeleteAll();
         
-        object LoadRaw(string key);
-        void SaveRaw(string key, object value);
-
         IEnumerable<string> GetAllKeys();
     }
 }

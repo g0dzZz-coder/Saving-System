@@ -1,37 +1,40 @@
 ﻿using System.Collections.Generic;
-using Depra.SavingSystem.Runtime.Backends;
+using Depra.Saving.Runtime.File.Context;
+using Depra.Saving.Runtime.Interfaces.Systems;
+using Depra.Tools.Serialization.Interfaces.Runtime;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Depra.SavingSystem.Runtime.Mono
+namespace Depra.Saving.Runtime.Mono
 {
     public class SaveNode : MonoBehaviour
     {
         [SerializeField] private string _key = "SaveData";
-        [SerializeReference, SubclassSelector] private FileSaveBackend _backend = new FileSaveBackend();
+        [SerializeField] private InterfaceReference<IFileSavingContext> _context;
+        [SerializeField] private InterfaceReference<ISaveSystem> _system;
 
-        //private FileSavingCommonParameters Parameters => SaveConfig.Instance.FileSaving;
-
-        private string FullKey => "";
-            //Parameters.GetFullPath(_key);
+        private IFileSavingContext Context => _context.Value;
+        private ISaveSystem System => _system.Value;
+        
+        private string FullKey => Context.GetFullPath(_key);
 
         [Button]
         public void Save()
         {
-            var state = _backend.Load(FullKey, new Dictionary<string, object>());
+            var state = System.Load(FullKey, new Dictionary<string, object>());
             CaptureState(state);
-            _backend.Save(FullKey, state);
+            System.Save(FullKey, state);
         }
 
         [Button]
         public void Load()
         {
-            var state = _backend.Load(FullKey, new Dictionary<string, object>());
+            var state = System.Load(FullKey, new Dictionary<string, object>());
             RestoreState(state);
         }
 
-        private void CaptureState(Dictionary<string, object> state)
+        private static void CaptureState(IDictionary<string, object> state)
         {
             foreach (var saveable in FindObjectsOfType<SaveableEntity>())
             {
@@ -41,11 +44,11 @@ namespace Depra.SavingSystem.Runtime.Mono
             state["lastSceneBuildIndex"] = SceneManager.GetActiveScene().buildIndex;
         }
 
-        private void RestoreState(Dictionary<string, object> state)
+        private static void RestoreState(IReadOnlyDictionary<string, object> state)
         {
             foreach (var saveable in FindObjectsOfType<SaveableEntity>())
             {
-                if (state.TryGetValue(saveable.Id, out object value))
+                if (state.TryGetValue(saveable.Id, out var value))
                 {
                     saveable.RestoreState(value);
                 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Depra.SavingSystem.Runtime.Data
+namespace Depra.Saving.Runtime.Data.Transform
 {
     [Serializable]
     public struct TransformData
@@ -10,6 +10,13 @@ namespace Depra.SavingSystem.Runtime.Data
         public Quaternion LocalRotation;
         public Vector3 LocalScale;
 
+        public void ApplyTo(UnityEngine.Transform transform)
+        {
+            transform.localPosition = LocalPosition;
+            transform.localRotation = LocalRotation;
+            transform.localScale = LocalScale;
+        }
+        
         public TransformData(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             LocalPosition = position;
@@ -17,16 +24,9 @@ namespace Depra.SavingSystem.Runtime.Data
             LocalScale = scale;
         }
 
-        public TransformData(Transform transform) : this(transform.localPosition, transform.localRotation,
-            transform.localScale)
+        public TransformData(UnityEngine.Transform transform) :
+            this(transform.localPosition, transform.localRotation, transform.localScale)
         {
-        }
-
-        public void ApplyTo(Transform transform)
-        {
-            transform.localPosition = LocalPosition;
-            transform.localRotation = LocalRotation;
-            transform.localScale = LocalScale;
         }
     }
 }

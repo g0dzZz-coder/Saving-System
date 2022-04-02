@@ -1,5 +1,5 @@
 {
-    "name": "SavingSystem.Runtime",
+    "name": "Saving.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:764e421ee60e8124f9a950731dfe7c56",
@@ -7,6 +7,7 @@
         "GUID:0bd375ccd9a5c7448ad77b2b9979b92a",
         "GUID:daa3f5012d93ad544af85828b5c6a7af",
         "GUID:b7fea2f83e96e4e45850e556fc1ff264",
+        "GUID:31976cc9e85bdd9459e856fcb40d0d50",
         "GUID:49b49c76ee64f6b41bf28ef951cb0e50",
         "GUID:146732467cca67f4a9bf8d4c48e2790a",
         "GUID:776d03a35f1b52c4a9aed9f56d7b4229"

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
-using Depra.SavingSystem.Runtime.Data;
+using Depra.Saving.Runtime.Data;
+using Depra.Saving.Runtime.Data.Transform;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace Depra.SavingSystem.Runtime.Mono.Transform
+namespace Depra.Saving.Runtime.Mono.Transform
 {
     public class TransformRecorder : MonoBehaviour
     {

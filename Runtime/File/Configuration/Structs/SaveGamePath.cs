@@ -1,15 +1,15 @@
-﻿namespace Depra.SavingSystem.Runtime.Data
+﻿namespace Depra.Saving.Runtime.File.Configuration.Structs
 {
     public enum SaveGamePath
     {
         /// <summary>
         /// The persistent data path. Application.persistentDataPath
         /// </summary>
-        PersistentDataPath,
+        PersistentDataPath = 0,
 
         /// <summary>
         /// The data path. Application.dataPath
         /// </summary>
-        DataPath
+        DataPath = 1
     }
 }

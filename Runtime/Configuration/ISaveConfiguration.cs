@@ -1,12 +1,15 @@
-﻿using Depra.SavingSystem.Runtime.Interfaces;
-using Depra.Toolkit.Serialization.Serializers;
+﻿using Depra.Saving.Runtime.File.Configuration;
+using Depra.Saving.Runtime.File.Configuration.Interfaces;
+using Depra.Saving.Runtime.Interfaces.Systems;
+using JetBrains.Annotations;
 
-namespace Depra.SavingSystem.Runtime.Configuration
+namespace Depra.Saving.Runtime.Configuration
 {
     public interface ISaveConfiguration
     {
-        ISaveBackend Backend { get; }
+        IRawSaveSystem PreferencesSystem { get; }
         
-        ISerializer Serializer { get; }
+        [PublicAPI]
+        IFileSavingConfiguration FileSaving { get; }
     }
 }

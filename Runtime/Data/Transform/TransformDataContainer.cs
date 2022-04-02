@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Depra.SavingSystem.Runtime.Data
+namespace Depra.Saving.Runtime.Data.Transform
 {
     [CreateAssetMenu(fileName = "Transform Data Container", menuName = "Misc/SO/TransformData", order = 51)]
     public class TransformDataContainer : ScriptableObject

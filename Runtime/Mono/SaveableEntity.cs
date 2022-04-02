@@ -1,27 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using Depra.SavingSystem.Runtime.Interfaces;
+using Depra.Saving.Runtime.Interfaces;
 using UnityEditor;
 using UnityEngine;
 
-namespace Depra.SavingSystem.Runtime.Mono
+namespace Depra.Saving.Runtime.Mono
 {
     [ExecuteAlways]
-    public class SaveableEntity : MonoBehaviour
+    public class SaveableEntity : MonoBehaviour, ISavingRoot
     {
-        [field: SerializeField] public string _id = string.Empty;
+        [SerializeField] private string _id;
 
         public string Id => _id;
 
-        private static readonly Dictionary<string, SaveableEntity> GlobalLookup = new Dictionary<string, SaveableEntity>();
+        private static readonly Dictionary<string, SaveableEntity> GlobalLookup = new();
 
+        public IEnumerable<ISaveable> GetAllSaveables() => GetComponents<ISaveable>();
+        
         public object CaptureState()
         {
             // Create a dictionary to store save data for this GameObject.
             var state = new Dictionary<string, object>();
 
             // Store all the save data from the saveable components on this GameObject.
-            foreach (var saveable in GetComponents<ISaveable>())
+            foreach (var saveable in GetAllSaveables())
             {
                 state[saveable.GetType().ToString()] = saveable.CaptureState();
             }
@@ -33,11 +35,11 @@ namespace Depra.SavingSystem.Runtime.Mono
         public void RestoreState(object state)
         {
             var stateDictionary = (Dictionary<string, object>)state;
-            
-            foreach (var saveable in GetComponents<ISaveable>())
+
+            foreach (var saveable in GetAllSaveables())
             {
                 var typeName = saveable.GetType().ToString();
-                
+
                 if (stateDictionary.TryGetValue(typeName, out var value))
                 {
                     saveable.RestoreState(value);
@@ -62,7 +64,7 @@ namespace Depra.SavingSystem.Runtime.Mono
             var serializedObject = new SerializedObject(this);
             var property = serializedObject.FindProperty("_id");
 
-            if (string.IsNullOrEmpty(property.stringValue) || !IsUnique(property.stringValue))
+            if (string.IsNullOrEmpty(property.stringValue) || IsUnique(property.stringValue) == false)
             {
                 property.stringValue = Guid.NewGuid().ToString();
                 serializedObject.ApplyModifiedProperties();
@@ -75,7 +77,7 @@ namespace Depra.SavingSystem.Runtime.Mono
 
         private bool IsUnique(string candidate)
         {
-            if (!GlobalLookup.ContainsKey(candidate))
+            if (GlobalLookup.ContainsKey(candidate) == false)
             {
                 return true;
             }

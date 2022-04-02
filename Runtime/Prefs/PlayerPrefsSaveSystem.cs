@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Depra.SavingSystem.Runtime.Interfaces;
+using Depra.Saving.Runtime.Interfaces.Systems;
 using UnityEngine;
 
-namespace Depra.SavingSystem.Runtime.Backends
+namespace Depra.Saving.Runtime.Prefs
 {
     [Serializable]
     [AddTypeMenu("Player Prefs")]
-    public class PlayerPrefsSaveBackend : ISaveBackend
+    public class PlayerPrefsSaveSystem : IRawSaveSystem
     {
         private const string NumbersCounterKey = "ss.keysCount";
         private static string INDEX_HOLDER_KEY(int index) => $"ss.{index}";

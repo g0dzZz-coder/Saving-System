@@ -1,19 +1,22 @@
 ﻿using System.Linq;
-using Depra.SavingSystem.Runtime;
-using Depra.SavingSystem.Runtime.Services;
+using Depra.Saving.Runtime.Configuration;
+using Depra.Saving.Runtime.Interfaces.Systems;
+using Depra.Saving.Runtime.Prefs;
 using UnityEditor;
 using UnityEngine;
 
-namespace Depra.SavingSystem.Editor
+namespace Depra.Saving.Editor
 {
     public class SavingsViewWindow : EditorWindow
     {
+        private static IRawSaveSystem RawSaveSystem => SaveConfig.Instance.PreferencesSystem;
+        
         private struct Data
         {
             public Data(string key)
             {
                 Key = key;
-                _rawData = SaveService.Instance.LoadRaw(key).ToString();
+                _rawData = RawSaveSystem.LoadRaw(key).ToString();
             }
 
             private string _rawData;
@@ -25,39 +28,32 @@ namespace Depra.SavingSystem.Editor
                 get => _rawData;
                 set
                 {
-                    SaveService.Instance.SaveRaw(Key, value);
+                    RawSaveSystem.SaveRaw(Key, value);
                     _rawData = value;
                 }
             }
         }
-
-        [MenuItem("Tools/Saves/Clear", priority = 1)]
-        public static void ClearSaves()
-        {
-            SaveManager.DeleteAll();
-        }
-
-        [MenuItem("Tools/Saves/Inspector", priority = 2)]
-        private static void ShowWindow()
+        
+        private Data[] _allData;
+        private Vector2 _scrollPos;
+        
+        public static void ShowWindow()
         {
             var window = GetWindow<SavingsViewWindow>();
-
             window.RefreshAllData();
 
             window.titleContent = new GUIContent("Saves Inspector");
             window.Show();
         }
 
-        private Data[] _allData;
-
-        private Vector2 _scrollPos;
-
         private void OnGUI()
         {
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, false, true);
 
             if (_allData == null)
+            {
                 RefreshAllData();
+            }
 
             for (var index = 0; index < _allData.Length; index++)
             {
@@ -75,7 +71,6 @@ namespace Depra.SavingSystem.Editor
             EditorGUILayout.TextField("key:", data.Key);
 
             var newData = EditorGUILayout.TextField("raw value:", data.RawData);
-
             if (newData != data.RawData)
             {
                 data.RawData = newData;
